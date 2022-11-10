@@ -6,13 +6,23 @@ export const getListOfPlacesToBe = async () => {
   return response;
 };
 
-export const postListOfPlcases = async (body) => {
-  let postListOfPlaces = await fetch(`${HOST}/saveNewPlace`, {
+export const postListOfPlaces = async (body) => {
+  const formData = new FormData();
+
+  for (let [key, value] of Object.entries(body)) {
+    formData.append(key, value);
+  }
+
+  let response = await fetch(`${HOST}/saveNewPlace`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
+    headers: { "Content-Type": "multipart/form-data" },
+    body: formData,
   });
 
-  let response = await postListOfPlaces.json();
-  return response;
+  if (response.ok) {
+    let listOfPlaces = await response.json();
+    return listOfPlaces;
+  } else {
+    throw new Error(`Request failed with status code ${response.status}`);
+  }
 };

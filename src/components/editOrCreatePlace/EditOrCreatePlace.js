@@ -1,33 +1,75 @@
-import { postListOfPlcases } from "../../services/placesToBeService";
+import { useState } from "react";
+import { postListOfPlaces } from "../../services/placesToBeService";
 
 export const EditOrCreatePlace = () => {
-  const saveChanges = async () => {
-    const response = await postListOfPlcases({ foo: "too" });
-    console.log(
-      "🚀 ~ file: EditOrCreatePlace.js ~ line 6 ~ saveChanges ~ response",
-      response
-    );
+  const [city, setCity] = useState("");
+  const [province, setProvince] = useState("");
+  const [country, setCountry] = useState("");
+  const [image, setImage] = useState(null);
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await postListOfPlaces({
+        city: city,
+        province: province,
+        country: country,
+        image: image,
+      });
+    } catch (err) {
+      console.log(
+        "🚀 ~ file: EditOrCreatePlace.js ~ line 18 ~ handleFormSubmit ~ err",
+        err
+      );
+    }
+  };
+
+  const uploadPlaceImage = (e) => {
+    setImage(URL.createObjectURL(e.target.files[0]));
   };
 
   return (
-    <div>
+    <form onSubmit={handleFormSubmit}>
       <div>
-        <label htmlFor="city">City:</label>
-        <input id="city" className="border-2"></input>
+        <div>
+          <label htmlFor="city">City:</label>
+          <input
+            id="city"
+            value={city}
+            className="border-2"
+            onChange={(e) => setCity(e.target.value)}
+          ></input>
+        </div>
+        <div>
+          <label htmlFor="province">Province:</label>
+          <input
+            id="province"
+            value={province}
+            className="border-2"
+            onChange={(e) => setProvince(e.target.value)}
+          ></input>
+        </div>
+        <div>
+          <label htmlFor="country">Country:</label>
+          <input
+            id="country"
+            value={country}
+            className="border-2"
+            onChange={(e) => setCountry(e.target.value)}
+          ></input>
+        </div>
+        <div>
+          <label htmlFor="placeImage">Image:</label>
+          <input
+            type="file"
+            name="placeToBe"
+            onChange={uploadPlaceImage}
+          ></input>
+        </div>
       </div>
-      <div>
-        <label htmlFor="province">Province:</label>
-        <input id="province" className="border-2"></input>
+      <div className="button">
+        <button className="button">Save</button>
       </div>
-      <div>
-        <label htmlFor="country">Country:</label>
-        <input id="country" className="border-2"></input>
-      </div>
-      <div>
-        <button className="button" onClick={saveChanges}>
-          Save
-        </button>
-      </div>
-    </div>
+    </form>
   );
 };
