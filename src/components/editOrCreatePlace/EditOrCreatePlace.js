@@ -10,7 +10,8 @@ export const EditOrCreatePlace = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await postListOfPlaces({
+      // const response =
+      await postListOfPlaces({
         city: city,
         province: province,
         country: country,
